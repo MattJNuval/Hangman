@@ -1,0 +1,49 @@
+> Upload Project 1 to Canvas
+
+> Project 2 Requirements and updates
+
+> How to use scripts (.bat and .sh) for building and running using a terminal
+
+ 
+
+> Useful links:
+
+General Examples
+
+https://docs.oracle.com/javase/tutorial/uiswing/examples/components/index.html (Links to an external site.)Links to an external site.
+
+Layouts
+
+https://docs.oracle.com/javase/tutorial/uiswing/layout/index.html (Links to an external site.)Links to an external site.
+
+Menus
+
+https://docs.oracle.com/javase/tutorial/uiswing/components/menu.html (Links to an external site.)Links to an external site.
+
+Find.java
+
+https://docs.oracle.com/javase/tutorial/displayCode.html?code=https://docs.oracle.com/javase/tutorial/uiswing/examples/layout/FindProject/src/layout/Find.java (Links to an external site.)Links to an external site.
+
+ 
+
+> Autocomplete hacks:
+
+https://stackoverflow.com/questions/10061796/java-program-which-remembers-saves-entered-fields (Links to an external site.)Links to an external site.
+
+https://stackoverflow.com/questions/14186955/create-a-autocompleting-textbox-in-java-with-a-dropdown-list (Links to an external site.)Links to an external site.
+
+https://github.com/sasjo/autocomplete (Links to an external site.)Links to an external site.
+
+ 
+
+> Java’s Preference API:
+
+Windows: stores the data in the Registry
+
+Unix-like: ~/.java/.userPrefs
+
+http://www.vogella.com/tutorials/JavaPreferences/article.html (Links to an external site.)Links to an external site.
+
+ 
+
+> How to use Log4J
