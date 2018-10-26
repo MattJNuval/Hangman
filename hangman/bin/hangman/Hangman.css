@@ -1,0 +1,27 @@
+.root {
+	-fx-font-family: "Comic Sans MS" ;	
+	-fx-background-color: lightgoldenrodyellow ;
+}
+.hangman-board {
+	-fx-background-color: saddlebrown ;
+	-fx-padding: 15px ;
+	-fx-alignment: center ;
+}
+
+.hangman-board > .board-grid {
+	-fx-background-color: white ;
+	-fx-border-color: transparent ;
+}
+
+.hangman-board .label:disabled {
+	-fx-opacity: 1.0 ;
+}
+
+.hangman-board > .board-grid > .label {
+	-fx-font-size: 128pt ;
+}
+
+.status {
+	-fx-font-size: 24pt ;
+	-fx-text-fill: sandybrown ;
+}
