@@ -1,5 +1,3 @@
-package hangman;
-
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
