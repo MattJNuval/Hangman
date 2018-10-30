@@ -6,8 +6,12 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
 
 public class Game {
 
@@ -19,6 +23,13 @@ public class Game {
 	private int index;
 	private final ReadOnlyObjectWrapper<GameStatus> gameStatus;
 	private ObjectProperty<Boolean> gameState = new ReadOnlyObjectWrapper<Boolean>();
+
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// variable inputedLetter - used for getting the recently inputed letter
+	// variable gameStarted - used to indicate whether the Game was started - implemented in ComputeValues
+	private String inputedLetter;
+	private boolean gameStarted = false;
 
 	public enum GameStatus {
 		GAME_OVER {
@@ -64,7 +75,12 @@ public class Game {
 			}
 
 		});
-		setRandomWord();
+
+		try {
+			setRandomWord();
+		} catch (Exception e) {
+			log("file was not found");
+		}
 		prepTmpAnswer();
 		prepLetterAndPosArray();
 		moves = 0;
@@ -82,13 +98,15 @@ public class Game {
 			@Override
 			public GameStatus computeValue() {
 				log("in computeValue");
+				System.out.println("tempAnswer is " + tmpAnswer);
 				GameStatus check = checkForWinner(index);
 				if(check != null ) {
 					return check;
 				}
 
-				if(tmpAnswer.trim().length() == 0){
+				if(tmpAnswer.trim().length() == 0 && !gameStarted){
 					log("new game");
+					gameStarted = true;
 					return GameStatus.OPEN;
 				}
 				else if (index != -1){
@@ -113,9 +131,39 @@ public class Game {
 		return gameStatus.get();
 	}
 
-	private void setRandomWord() {
-		//int idx = (int) (Math.random() * words.length);
-		answer = "apple";//words[idx].trim(); // remove new line character
+	private void setRandomWord() throws FileNotFoundException {
+
+		// get number of words in textfile
+		// allows new names to be added to the text file without breaking anything
+
+		File file = new File(".idea/words.txt");
+		Scanner input = new Scanner(file);
+		int numWords = 0;
+		while (input.hasNextLine() != false) {
+			numWords++;
+			input.nextLine();
+		}
+		input.close();
+		// generate a random number between 0 and numWords
+		Random random = new Random();
+		int lineNumber = random.nextInt(numWords);
+
+		// retrieve a random word from the file and set answer to it
+		Scanner inputFind = new Scanner(file);
+		int i = 0;
+		while (inputFind.hasNextLine() != false) {
+			String word = inputFind.nextLine();
+			if (i == lineNumber) {
+				answer = word;
+				break;
+			} else {
+				i++;
+			}
+		}
+		input.close();
+
+		//answer = "apple";//words[idx].trim(); // remove new line character
+
 	}
 
 	private void prepTmpAnswer() {
@@ -148,10 +196,12 @@ public class Game {
 	private int update(String input) {
 		int index = getValidIndex(input);
 		if(index != -1) {
+			System.out.println("index is not -1");
 			StringBuilder sb = new StringBuilder(tmpAnswer);
 			sb.setCharAt(index, input.charAt(0));
 			tmpAnswer = sb.toString();
 		}
+		System.out.println("index is " + index);
 		return index;
 	}
 
@@ -159,15 +209,52 @@ public class Game {
 
 	public void makeMove(String letter) {
 		log("\nin makeMove: " + letter);
+		inputedLetter = letter;
 		index = update(letter);
 		// this will toggle the state of the game
 		gameState.setValue(!gameState.getValue());
 	}
 
-	public void reset() {}
+	// allows you to get tmpAnswer for displaying what user has gotten so far
+	public String getTmpAnswer() {
+		return tmpAnswer;
+	}
 
+	// allows you to get inputedLetter for displaying
+	public String getInputedLetter(){
+		return inputedLetter;
+	}
+
+	// where game will reset
+	// set moves to 0
+	// reset tmpAnswer
+	// reset the letterAndPosArray
+	// reset the random word
+	// set gameStarted to false
+	// reset gameStatusBinding to new game
+	public void reset() {
+
+		// important that the random word is set first
+
+		try {
+			setRandomWord();
+		} catch (Exception e) {
+			log("couldnt find file");
+		}
+
+		moves = 0;
+		prepTmpAnswer();
+		prepLetterAndPosArray();
+
+		gameStarted = false;
+		createGameStatusBinding();
+
+
+	}
+
+	// now gives tries based on answer word length
 	private int numOfTries() {
-		return 5; // TODO, fix me
+		return answer.length(); // TODO, fix me
 	}
 
 	public static void log(String s) {
@@ -182,6 +269,7 @@ public class Game {
 		}
 		else if(moves == numOfTries()) {
 			log("game over");
+			log(answer);
 			return GameStatus.GAME_OVER;
 		}
 		else {
