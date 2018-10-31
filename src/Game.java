@@ -30,6 +30,7 @@ public class Game {
 	// variable gameStarted - used to indicate whether the Game was started - implemented in ComputeValues
 	private String inputedLetter;
 	private boolean gameStarted = false;
+	
 
 	public enum GameStatus {
 		GAME_OVER {
