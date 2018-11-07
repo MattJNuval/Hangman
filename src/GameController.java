@@ -59,6 +59,7 @@ public class GameController {
 				if(newValue.length() > 0) {
 					System.out.print(newValue);
 					game.makeMove(newValue);
+					answerField.textProperty().bind(Bindings.format("%s", game.getTmpAnswer()));
 					textField.clear();
 				}
 			}
@@ -88,7 +89,7 @@ public class GameController {
 	}
 
 	private void setUpAnswerField() {
-		answerField.textProperty().bind(Bindings.format("%s", "YOOOOO"));
+		answerField.textProperty().bind(Bindings.format("%s", game.getTmpAnswer()));
 
 	}
 
