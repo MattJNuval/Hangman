@@ -5,14 +5,11 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -41,6 +38,7 @@ public class Game {
 			public String toString() {
 				return "Game over!";
 			}
+			
 		},
 		BAD_GUESS {
 			@Override
@@ -103,6 +101,7 @@ public class Game {
 			public GameStatus computeValue() {
 				log("in computeValue");
 				System.out.println("tempAnswer is " + tmpAnswer);
+				System.out.println("Answer is " + answer);
 				GameStatus check = checkForWinner(index);
 				if(check != null ) {
 					return check;
@@ -165,14 +164,20 @@ public class Game {
 		}
 		input.close();
 
+		//answer = "apple";//words[idx].trim(); // remove new line character
+
 	}
 
 	private void prepTmpAnswer() {
 		StringBuilder sb = new StringBuilder();
 		for(int i = 0; i < answer.length(); i++) {
-			sb.append(" ");
+			sb.append("*");
 		}
 		tmpAnswer = sb.toString();
+	}
+
+	private String getTemp(){
+		return tmpAnswer;
 	}
 
 	private void prepLetterAndPosArray() {
@@ -277,9 +282,5 @@ public class Game {
 		else {
 			return null;
 		}
-	}
-
-	public String getAnswer(){
-		return answer;
 	}
 }
