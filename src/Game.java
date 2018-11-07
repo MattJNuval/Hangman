@@ -38,6 +38,7 @@ public class Game {
 			public String toString() {
 				return "Game over!";
 			}
+			
 		},
 		BAD_GUESS {
 			@Override
@@ -100,6 +101,7 @@ public class Game {
 			public GameStatus computeValue() {
 				log("in computeValue");
 				System.out.println("tempAnswer is " + tmpAnswer);
+				System.out.println("Answer is " + answer);
 				GameStatus check = checkForWinner(index);
 				if(check != null ) {
 					return check;
@@ -169,9 +171,13 @@ public class Game {
 	private void prepTmpAnswer() {
 		StringBuilder sb = new StringBuilder();
 		for(int i = 0; i < answer.length(); i++) {
-			sb.append(" ");
+			sb.append("*");
 		}
 		tmpAnswer = sb.toString();
+	}
+
+	private String getTemp(){
+		return tmpAnswer;
 	}
 
 	private void prepLetterAndPosArray() {

@@ -38,12 +38,19 @@ public class GameController {
 	private Label enterALetterLabel ;
 	@FXML
 	private TextField textField ;
+	@FXML
+	private Label answerBox;
+	@FXML
+	private Label answerField;
+
 
     public void initialize() throws IOException {
 		System.out.println("in initialize");
 		drawHangman();
 		addTextBoxListener();
 		setUpStatusLabelBindings();
+		setUpAnswerLabelBindings();
+		setUpAnswerField();
 	}
 
 	private void addTextBoxListener() {
@@ -54,11 +61,13 @@ public class GameController {
 					System.out.print(newValue);
 					game.makeMove(newValue);
 					updateHangman();
+					answerField.textProperty().bind(Bindings.format("%s", game.getTmpAnswer()));
 					textField.clear();
 				}
 			}
 		});
 	}
+
 
 	private void setUpStatusLabelBindings() {
 
@@ -74,6 +83,16 @@ public class GameController {
 			)
 		);
 		*/
+	}
+
+	private void setUpAnswerLabelBindings() {
+		answerBox.textProperty().bind(Bindings.format("%s", "Answer Box:"));
+
+	}
+
+	private void setUpAnswerField() {
+		answerField.textProperty().bind(Bindings.format("%s", game.getTmpAnswer()));
+
 	}
 
 	private void drawHangman() {
