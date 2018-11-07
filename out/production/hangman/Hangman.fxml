@@ -37,24 +37,13 @@
 				</styleClass>
 			</Label>
 			<GridPane>
-				<Label fx:id="enterALetterLabel" GridPane.rowIndex="1" GridPane.columnIndex="0">
+				<Label fx:id="enterALetterLabel" GridPane.columnIndex="0">
 					<styleClass>
 						<String fx:value="status"/>
 					</styleClass>
 				</Label>
-				<TextField fx:id="textField" GridPane.rowIndex="1" GridPane.columnIndex="1">
+				<TextField fx:id="textField" GridPane.columnIndex="1">
 				</TextField>
-				<Label fx:id="answerBox" GridPane.rowIndex="0" GridPane.columnIndex="0">
-					<styleClass>
-						<String fx:value="status"/>
-					</styleClass>
-				</Label>
-				<Label fx:id="answerField" GridPane.rowIndex="0" GridPane.columnIndex="1">
-					<styleClass>
-						<String fx:value="status"/>
-					</styleClass>
-				</Label>
-
 			</GridPane>
 		</VBox>
 	</bottom>

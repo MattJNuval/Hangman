@@ -3,11 +3,7 @@
 	-fx-background-color: lightgoldenrodyellow ;
 }
 .hangman-board {
-<<<<<<< HEAD
 	-fx-background-color: #3a8b85;
-=======
-	-fx-background-color: grey ;
->>>>>>> design/frontend
 	-fx-padding: 15px ;
 	-fx-alignment: center ;
 }
@@ -27,5 +23,5 @@
 
 .status {
 	-fx-font-size: 24pt ;
-	-fx-text-fill: Black ;
+	-fx-text-fill: sandybrown ;
 }
