@@ -26,7 +26,7 @@ public class Game {
 
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// variable inputedLetter - used for getting the recently inputed letter
+	//variable inputedLetter - used for getting the recently inputed letter
 	// variable gameStarted - used to indicate whether the Game was started - implemented in ComputeValues
 	private String inputedLetter;
 	private boolean gameStarted = false;
@@ -118,7 +118,6 @@ public class Game {
 					moves++;
 					log("bad guess");
 					return GameStatus.BAD_GUESS;
-					//printHangman();
 				}
 			}
 		};
@@ -206,8 +205,6 @@ public class Game {
 		return index;
 	}
 
-	private static void drawHangmanFrame() {}
-
 	public void makeMove(String letter) {
 		log("\nin makeMove: " + letter);
 		inputedLetter = letter;
@@ -215,6 +212,10 @@ public class Game {
 		// this will toggle the state of the game
 		gameState.setValue(!gameState.getValue());
 	}
+
+	public int getMoves(){
+	    return moves;
+    }
 
 	// allows you to get tmpAnswer for displaying what user has gotten so far
 	public String getTmpAnswer() {
@@ -253,9 +254,8 @@ public class Game {
 
 	}
 
-	// now gives tries based on answer word length
 	private int numOfTries() {
-		return answer.length(); // TODO, fix me
+		return 6; // Based on the number of body parts of the stick figure
 	}
 
 	public static void log(String s) {
