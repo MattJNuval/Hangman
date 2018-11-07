@@ -1,13 +1,9 @@
 .root {
-	-fx-font-family: "Comic Sans MS" ;	
+	-fx-font-family: "Comic Sans MS" ;
 	-fx-background-color: lightgoldenrodyellow ;
 }
 .hangman-board {
-<<<<<<< HEAD
 	-fx-background-color: #3a8b85;
-=======
-	-fx-background-color: grey ;
->>>>>>> design/frontend
 	-fx-padding: 15px ;
 	-fx-alignment: center ;
 }

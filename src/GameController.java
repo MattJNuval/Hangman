@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -7,6 +8,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -43,7 +46,6 @@ public class GameController {
 	@FXML
 	private Label answerField;
 
-
     public void initialize() throws IOException {
 		System.out.println("in initialize");
 		drawHangman();
@@ -61,13 +63,11 @@ public class GameController {
 					System.out.print(newValue);
 					game.makeMove(newValue);
 					updateHangman();
-					answerField.textProperty().bind(Bindings.format("%s", game.getTmpAnswer()));
 					textField.clear();
 				}
 			}
 		});
 	}
-
 
 	private void setUpStatusLabelBindings() {
 
@@ -156,6 +156,7 @@ public class GameController {
 					man.getChildren().get(6).setVisible(true);
 					board.getChildren().clear();
 					board.getChildren().add(man);
+					promptNewGame();
 					break;
 				default:
 					break;
@@ -166,11 +167,32 @@ public class GameController {
 	@FXML 
 	private void newHangman() {
 		game.reset();
+		initHangman();
 	}
 
 	@FXML
 	private void quit() {
 		board.getScene().getWindow().hide();
+	}
+
+	private void promptNewGame(){
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+		alert.setTitle("Game Over");
+		alert.setHeaderText("Answer: " + game.getAnswer());
+		alert.setContentText("You are out of guesses. Select new game or quit.");
+
+		ButtonType newGame = new ButtonType("New Game");
+		ButtonType quit = new ButtonType("Quit");
+
+		alert.getButtonTypes().setAll(newGame, quit);
+
+		Optional<ButtonType> result = alert.showAndWait();
+
+		if(result.get() == newGame){
+			newHangman();
+		}else if(result.get() == quit){
+			quit();
+		}
 	}
 
 }
