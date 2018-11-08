@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.GridPane?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml">
-	
+
 	<top>
 		<MenuBar>
 			<Menu text="Game">
@@ -28,7 +28,7 @@
 			</styleClass>
 		</VBox>
 	</center>
-	
+
 	<bottom>
 		<VBox>
 			<Label fx:id="statusLabel">
