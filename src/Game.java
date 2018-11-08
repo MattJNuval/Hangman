@@ -171,7 +171,7 @@ public class Game {
 	private void prepTmpAnswer() {
 		StringBuilder sb = new StringBuilder();
 		for(int i = 0; i < answer.length(); i++) {
-			sb.append("*");
+			sb.append(" ");
 		}
 		tmpAnswer = sb.toString();
 	}

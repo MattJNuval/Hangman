@@ -42,6 +42,8 @@ public class GameController {
 	private Label answerBox;
 	@FXML
 	private Label answerField;
+	@FXML
+    private Label wrongLabel;
 
 
     public void initialize() throws IOException {
@@ -51,7 +53,8 @@ public class GameController {
 		setUpStatusLabelBindings();
 		setUpAnswerLabelBindings();
 		setUpAnswerField();
-	}
+        setupWrongLabel();
+    }
 
 	private void addTextBoxListener() {
 		textField.textProperty().addListener(new ChangeListener<String>() {
@@ -87,6 +90,10 @@ public class GameController {
 
 	private void setUpAnswerLabelBindings() {
 		answerBox.textProperty().bind(Bindings.format("%s", "Answer Box:"));
+
+	}
+	private void setupWrongLabel() {
+        wrongLabel.textProperty().bind(Bindings.format("%s", "Wrong Letters:"));
 
 	}
 
