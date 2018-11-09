@@ -20,6 +20,9 @@ public class Hangman extends Application {
 	}
 
 	public static void main(String[] args) {
+		System.out.println("HELLO WORLD");
+		int b = 2*2;
+		System.out.println(b);
 		launch(args);
 	}
 
