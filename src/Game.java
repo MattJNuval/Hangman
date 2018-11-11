@@ -10,11 +10,7 @@ import javafx.scene.control.ButtonType;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class Game {
 
@@ -33,6 +29,13 @@ public class Game {
 	// variable gameStarted - used to indicate whether the Game was started - implemented in ComputeValues
 	private String inputedLetter;
 	private boolean gameStarted = false;
+
+	// array that changes based on progress
+	private String progressArr[];
+
+	// String used in the label to display progress
+	private String progressDisp;
+
 	
 
 	public enum GameStatus {
@@ -88,6 +91,8 @@ public class Game {
 		prepTmpAnswer();
 		prepLetterAndPosArray();
 		moves = 0;
+		setProgressArr();
+		log("for DEV rm later answer is " + answer);
 
 		gameState.setValue(false); // initial state
 		createGameStatusBinding();
@@ -210,6 +215,11 @@ public class Game {
 		log("\nin makeMove: " + letter);
 		inputedLetter = letter;
 		index = update(letter);
+
+		if(index != -1) {
+			updateProgessArr(index, inputedLetter);
+		}
+
 		// this will toggle the state of the game
 		gameState.setValue(!gameState.getValue());
 	}
@@ -227,6 +237,54 @@ public class Game {
 	public String getInputedLetter(){
 		return inputedLetter;
 	}
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// allows controller to get the labels display
+	public String getProgressDisp() {
+		return progressDisp;
+	}
+
+	//must call after the progressArr is instantiated or nullptr will occur
+	public void setProgressArr() {
+
+		int progressArrSize = answer.length() * 2;
+		progressArr = new String[progressArrSize];
+		Arrays.fill(progressArr, "");
+
+		for(int i = 0; i < answer.length(); i++) {
+			int progressIndex = 2 * i;
+			progressArr[progressIndex] = "_";
+		}
+
+		log("progressArr set " + Arrays.toString(progressArr));
+	}
+
+	public void updateProgessArr(int newIndex, String inputedLetter) {
+
+		newIndex = newIndex * 2;
+		progressArr[newIndex] = inputedLetter;
+
+		log("progress array is updatded to " + Arrays.toString(progressArr));
+		setProgressDisp();
+
+		log("progressDisp is " + progressDisp);
+
+	}
+
+	// updates the display string
+	// doing this because a simple .toString on progressArr would involve an object wrapping that
+	// results in progressDisp looking like the following { a, p, p, l, e }
+	public void setProgressDisp() {
+
+		progressDisp = "";
+
+		for(int j = 0; j < progressArr.length; j++) {
+			progressDisp = progressDisp + progressArr[j] + " ";
+
+		}
+
+	}
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// where game will reset
 	// set moves to 0
@@ -248,6 +306,8 @@ public class Game {
 		moves = 0;
 		prepTmpAnswer();
 		prepLetterAndPosArray();
+		setProgressArr();
+		progressDisp = "";
 
 		gameStarted = false;
 		createGameStatusBinding();
