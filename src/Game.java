@@ -6,8 +6,7 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.*;
 
 public class Game {
@@ -182,6 +181,45 @@ public class Game {
 		input.close();
 
 		//answer = "apple";//words[idx].trim(); // remove new line character
+
+	}
+
+	public void addNewWord(String newWord) throws IOException {
+
+		char newWordChar[] = newWord.toCharArray();
+
+		for(int i = 0; i < newWordChar.length; i++) {
+
+			if(!(Character.isAlphabetic(newWordChar[i]))) {
+
+			} else {
+
+			}
+
+		}
+
+
+		String totalStr = "";
+
+		File file = new File(".idea/wordTest1.txt");
+
+		FileReader fr = new FileReader(file);
+		BufferedReader br = new BufferedReader(fr);
+
+
+		while(br.readLine() != null) {
+			totalStr = totalStr + br.readLine();
+		}
+
+		br.close();
+
+		totalStr = totalStr + "\n" + newWord;
+
+
+		FileWriter fw = new FileWriter(file);
+		fw.write(totalStr);
+		fw.close();
+
 
 	}
 

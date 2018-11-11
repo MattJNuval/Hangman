@@ -154,4 +154,9 @@ public class GameController {
 		board.getScene().getWindow().hide();
 	}
 
+	@FXML
+	private void addWords() {
+		System.out.println("th");
+	}
+
 }

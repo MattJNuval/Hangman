@@ -1,0 +1,3 @@
+attack
+run
+sit
