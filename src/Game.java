@@ -5,9 +5,17 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+import java.util.Scanner;
 
 public class Game {
 
@@ -32,13 +40,12 @@ public class Game {
 	private String inputedLetter;
 	private boolean gameStarted = false;
 
-
 	// array that changes based on progress
 	private String progressArr[];
 
 	// String used in the label to display progress
 	private String progressDisp;
-	
+
 
 	public enum GameStatus {
 		GAME_OVER {
@@ -93,6 +100,8 @@ public class Game {
 		prepTmpAnswer();
 		prepLetterAndPosArray();
 		moves = 0;
+		setProgressArr();
+		log("for DEV rm later answer is " + answer);
 
 		setProgressArr();
 		log("for DEV rm later answer is " + answer);
@@ -180,8 +189,6 @@ public class Game {
 		}
 		input.close();
 
-		//answer = "apple";//words[idx].trim(); // remove new line character
-
 	}
 
 	public void addNewWord(String newWord) throws IOException {
@@ -266,6 +273,11 @@ public class Game {
 		log("\nin makeMove: " + letter);
 		inputedLetter = letter;
 		index = update(letter);
+
+		if(index != -1) {
+			updateProgessArr(index, inputedLetter);
+		}
+
 		// this will toggle the state of the game
 		gameState.setValue(!gameState.getValue());
 	}
@@ -284,6 +296,7 @@ public class Game {
 		return inputedLetter;
 	}
 
+
 	// allows controller to get the labels display
 	public String getProgressDisp() {
 		return progressDisp;
@@ -297,7 +310,8 @@ public class Game {
 		Arrays.fill(progressArr, "");
 
 		for(int i = 0; i < answer.length(); i++) {
-		int progressIndex = 2 * i;
+
+			int progressIndex = 2 * i;
 			progressArr[progressIndex] = "_";
 		}
 
@@ -352,6 +366,8 @@ public class Game {
 		moves = 0;
 		prepTmpAnswer();
 		prepLetterAndPosArray();
+		setProgressArr();
+		progressDisp = "";
 
 		setProgressArr();
 		progressDisp = "";
@@ -385,5 +401,9 @@ public class Game {
 		else {
 			return null;
 		}
+	}
+
+	public String getAnswer(){
+		return answer;
 	}
 }

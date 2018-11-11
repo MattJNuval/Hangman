@@ -1,5 +1,5 @@
 .root {
-	-fx-font-family: "Comic Sans MS" ;	
+	-fx-font-family: "Comic Sans MS" ;
 	-fx-background-color: lightgoldenrodyellow ;
 }
 .hangman-board {
@@ -23,5 +23,5 @@
 
 .status {
 	-fx-font-size: 24pt ;
-	-fx-text-fill: sandybrown ;
+	-fx-text-fill: Black ;
 }
