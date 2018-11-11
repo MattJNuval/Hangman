@@ -322,7 +322,7 @@ public class Game {
 		prepLetterAndPosArray();
 		setProgressArr();
 		progressDisp = "";
-
+		wrongLetter = " ";
 		gameStarted = false;
 		createGameStatusBinding();
 
