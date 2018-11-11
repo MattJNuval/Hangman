@@ -103,6 +103,7 @@ public class Game {
 			public GameStatus computeValue() {
 				log("in computeValue");
 				System.out.println("tempAnswer is " + tmpAnswer);
+				System.out.println("Answer is: " + answer);
 				GameStatus check = checkForWinner(index);
 				if(check != null ) {
 					return check;
@@ -126,6 +127,8 @@ public class Game {
 		};
 		gameStatus.bind(gameStatusBinding);
 	}
+
+
 
 	public ReadOnlyObjectProperty<GameStatus> gameStatusProperty() {
 		return gameStatus.getReadOnlyProperty();

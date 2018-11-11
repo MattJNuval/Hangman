@@ -163,11 +163,16 @@ public class GameController {
 					man.getChildren().get(6).setVisible(true);
 					board.getChildren().clear();
 					board.getChildren().add(man);
-					promptNewGame();
 					break;
 				default:
 					break;
 			}
+		}
+		else if(game.getGameStatus() == Game.GameStatus.GAME_OVER) {
+			promptNewGameIfLost();
+		}
+		else if(game.getGameStatus() == Game.GameStatus.WON){
+			promptNewGameIfWin();
 		}
 	}
 		
@@ -182,7 +187,31 @@ public class GameController {
 		board.getScene().getWindow().hide();
 	}
 
-	private void promptNewGame(){
+
+
+
+	private void promptNewGameIfWin() {
+    	Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+    	alert.setTitle("Game Over");
+    	alert.setHeaderText("You win!");
+    	alert.setContentText("You have won the game! Select new game or quit");
+
+    	ButtonType newGame = new ButtonType("New Game");
+    	ButtonType quit = new ButtonType("Quit");
+
+    	alert.getButtonTypes().setAll(newGame, quit);
+
+    	Optional<ButtonType> result = alert.showAndWait();
+
+    	if(result.get() == newGame) {
+    		newHangman();
+		}
+		else if(result.get() == quit) {
+			quit();
+		}
+	}
+
+	private void promptNewGameIfLost(){
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 		alert.setTitle("Game Over");
 		alert.setHeaderText("Answer: " + game.getAnswer());
