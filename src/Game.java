@@ -258,6 +258,22 @@ public class Game {
 
 	}
 
+	public void continueGame() {
+		try {
+			setRandomWord();
+		} catch (Exception e) {
+			log("couldnt find file");
+		}
+
+		moves = getMoves();
+		prepTmpAnswer();;
+		prepLetterAndPosArray();
+
+		gameStarted = false;
+		createGameStatusBinding();
+
+	}
+
 	private int numOfTries() {
 		return 6; // Based on the number of body parts of the stick figure
 	}

@@ -47,6 +47,8 @@ public class GameController {
 	private Label answerField;
 	@FXML
     private Label wrongLabel;
+	@FXML
+	private Label wrongList;
 
     public void initialize() throws IOException {
 		System.out.println("in initialize");
@@ -55,7 +57,8 @@ public class GameController {
 		setUpStatusLabelBindings();
 		setUpAnswerLabelBindings();
 		setUpAnswerField();
-        setupWrongLabel();
+        setUpWrongLabelBindings();
+        setUpWrongListBindings();
     }
 
 	private void addTextBoxListener() {
@@ -92,9 +95,13 @@ public class GameController {
 		answerBox.textProperty().bind(Bindings.format("%s", "Answer Box:"));
 
 	}
-	private void setupWrongLabel() {
+	private void setUpWrongLabelBindings() {
         wrongLabel.textProperty().bind(Bindings.format("%s", "Wrong Letters:"));
 
+	}
+
+	private void setUpWrongListBindings() {
+    	wrongList.textProperty().bind(Bindings.format("%s","YOOOOOO"));
 	}
 
 	private void setUpAnswerField() {
@@ -182,6 +189,15 @@ public class GameController {
 		initHangman();
 	}
 
+	private void sameHangman() {
+    	game.continueGame();
+	}
+
+	@FXML
+	private void newHardHangman(){
+
+	}
+
 	@FXML
 	private void quit() {
 		board.getScene().getWindow().hide();
@@ -194,17 +210,21 @@ public class GameController {
     	Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
     	alert.setTitle("Game Over");
     	alert.setHeaderText("You win!");
-    	alert.setContentText("You have won the game! Select new game or quit");
+    	alert.setContentText("You have won the game! Select new game,continue or quit");
 
     	ButtonType newGame = new ButtonType("New Game");
+    	ButtonType contGame = new ButtonType("Continue");
     	ButtonType quit = new ButtonType("Quit");
 
-    	alert.getButtonTypes().setAll(newGame, quit);
+    	alert.getButtonTypes().setAll(newGame, contGame, quit);
 
     	Optional<ButtonType> result = alert.showAndWait();
 
     	if(result.get() == newGame) {
     		newHangman();
+		}
+		else if(result.get() == contGame) {
+			sameHangman();
 		}
 		else if(result.get() == quit) {
 			quit();
