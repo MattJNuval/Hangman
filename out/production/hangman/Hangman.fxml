@@ -59,6 +59,11 @@
 						<String fx:value="status"/>
 					</styleClass>
 				</Label>
+				<Label fx:id="wrongList" GridPane.rowIndex="2" GridPane.columnIndex="1">
+					<styleClass>
+						<String fx:value="status"/>
+					</styleClass>
+				</Label>
 			</GridPane>
 		</VBox>
 	</bottom>

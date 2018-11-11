@@ -101,7 +101,7 @@ public class GameController {
 	}
 
 	private void setUpWrongListBindings() {
-    	wrongList.textProperty().bind(Bindings.format("%s","YOOOOOO"));
+    	wrongList.textProperty().bind(Bindings.format("%s",""));
 	}
 
 	private void setUpAnswerField() {
@@ -138,6 +138,9 @@ public class GameController {
 
 	private void updateHangman(){
 		Group man = (Group)board.getChildren().get(0);
+		//Updates the Fields
+		answerField.textProperty().bind(Bindings.format("%s", game.getTmpAnswer()));
+		wrongList.textProperty().bind(Bindings.format("%s",game.getwrongLetter()));
 
 		if(game.getGameStatus() == Game.GameStatus.BAD_GUESS){
 			switch (game.getMoves()){
@@ -176,9 +179,13 @@ public class GameController {
 			}
 		}
 		else if(game.getGameStatus() == Game.GameStatus.GAME_OVER) {
+
+			textField.clear();
+
 			promptNewGameIfLost();
 		}
 		else if(game.getGameStatus() == Game.GameStatus.WON){
+			textField.clear();
 			promptNewGameIfWin();
 		}
 	}

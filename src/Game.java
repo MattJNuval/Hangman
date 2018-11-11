@@ -31,7 +31,8 @@ public class Game {
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//variable inputedLetter - used for getting the recently inputed letter
 	// variable gameStarted - used to indicate whether the Game was started - implemented in ComputeValues
-	private String inputedLetter;
+	private String inputedLetter = "";
+	private String wrongLetter =" ";
 	private boolean gameStarted = false;
 	
 
@@ -227,8 +228,13 @@ public class Game {
 	}
 
 	// allows you to get inputedLetter for displaying
-	public String getInputedLetter(){
-		return inputedLetter;
+	public String getwrongLetter(){
+
+		if(this.getGameStatus() == Game.GameStatus.BAD_GUESS)
+		{
+			wrongLetter = wrongLetter +inputedLetter;
+		}
+		return wrongLetter;
 	}
 
 	// where game will reset
