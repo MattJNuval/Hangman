@@ -46,6 +46,11 @@ public class Game {
 	// String used in the label to display progress
 	private String progressDisp;
 
+	boolean defaultWordBank = true;
+	boolean easy = false;
+	boolean medium = false;
+	boolean hard = false;
+
 
 	public enum GameStatus {
 		GAME_OVER {
@@ -163,7 +168,34 @@ public class Game {
 		// get number of words in textfile
 		// allows new names to be added to the text file without breaking anything
 
-		File file = new File(".idea/words.txt");
+		File file;
+
+		String wordDefault = ".idea/words.txt";
+		String wordEasy = ".idea/wordEasy.txt";
+		String wordMedium = ".idea/wordMedium.txt";
+		String wordHard = ".idea/wordHard.txt";
+
+
+		if(defaultWordBank) {
+			file = new File(wordDefault);
+
+		} else if(easy){
+			file = new File(wordEasy);
+
+		} else if(medium) {
+			file = new File(wordMedium);
+
+		} else if(hard) {
+			file = new File(wordHard);
+
+		} else {
+			//shouldnt get here but covering my bases
+			file = new File(wordDefault);
+		}
+
+
+
+
 		Scanner input = new Scanner(file);
 		int numWords = 0;
 		while (input.hasNextLine() != false) {
@@ -191,41 +223,81 @@ public class Game {
 
 	}
 
+	// in this we add to the main bank and then add the word to its appropriate difficulty bank
 	public void addNewWord(String newWord) throws IOException {
 
-		char newWordChar[] = newWord.toCharArray();
+        // strings for the paths
+		String wordDefault = ".idea/words.txt";
+		String wordEasy = ".idea/wordEasy.txt";
+		String wordMedium = ".idea/wordMedium.txt";
+		String wordHard = ".idea/wordHard.txt";
 
-		for(int i = 0; i < newWordChar.length; i++) {
 
-			if(!(Character.isAlphabetic(newWordChar[i]))) {
+		String totalStr = "";
+		String readStr = "";
 
-			} else {
+		File file;
 
-			}
+
+		if(newWord.length() <= 3) {
+
+			file = new File(wordEasy);
+
+		} else if(newWord.length() > 3 && newWord.length() <= 5) {
+			file = new File(wordMedium);
+
+		} else if(newWord.length() > 5) {
+			file = new File(wordHard);
+
+		} else {
+			// should take care of any odd behavior for now
+			file = new File(wordDefault);
 
 		}
 
 
-		String totalStr = "";
-
-		File file = new File(".idea/wordTest1.txt");
 
 		FileReader fr = new FileReader(file);
 		BufferedReader br = new BufferedReader(fr);
 
 
-		while(br.readLine() != null) {
-			totalStr = totalStr + br.readLine();
+		while((readStr = br.readLine()) != null) {
+			totalStr = totalStr + readStr + "\n";
 		}
 
 		br.close();
 
-		totalStr = totalStr + "\n" + newWord;
+		totalStr = totalStr + newWord;
 
 
 		FileWriter fw = new FileWriter(file);
 		fw.write(totalStr);
 		fw.close();
+
+
+
+		// add the word to the master list
+		totalStr = "";
+		readStr = "";
+
+		File fileWords = new File(wordDefault);
+		FileReader frW = new FileReader(fileWords);
+		BufferedReader brW = new BufferedReader(frW);
+
+
+		while((readStr = brW.readLine()) != null) {
+			totalStr = totalStr + readStr + "\n";
+		}
+
+		brW.close();
+
+		totalStr = totalStr + newWord;
+
+
+		FileWriter fwW = new FileWriter(fileWords);
+		fwW.write(totalStr);
+		fwW.close();
+
 
 
 	}

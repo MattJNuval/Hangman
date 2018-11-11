@@ -8,10 +8,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -176,9 +173,81 @@ public class GameController {
 	}
 
 	@FXML
-	private void addWords() {
+	private void addWords() throws IOException {
+
+    	String newWord;
+
+		TextInputDialog dialog = new TextInputDialog();
+		dialog.setTitle("Add a Word to Game");
+		dialog.setHeaderText("Input a valid word");
+		dialog.setContentText("Word");
+
+
+		Optional<String> result = dialog.showAndWait();
+		if (result.isPresent()){
+
+			boolean isValid = true;
+			char wordArr[] = result.get().toCharArray();
+
+			for(int i = 0; i < wordArr.length; i++) {
+				if(!(Character.isAlphabetic(wordArr[i]))) {
+					isValid = false;
+				}
+			}
+
+if(isValid) {
+	newWord = result.get();
+	game.addNewWord(newWord);
+	System.out.println(newWord);
+
+} else {
+	Alert alert = new Alert(Alert.AlertType.WARNING);
+	alert.setTitle("Invalid Word");
+	alert.setHeaderText("Word inputed was invalid");
+	alert.setContentText("Make sure you word is a valid english word and contains no non-alphabetic characters");
+
+	alert.showAndWait();
+}
+
+
+
+
+		}
 
 	}
+
+	@FXML
+	private void setDefault() {
+    	game.defaultWordBank = true;
+    	game.easy = false;
+    	game.medium = false;
+    	game.hard = false;
+	}
+	@FXML
+	private void setEasy() {
+	   game.easy = true;
+
+		game.defaultWordBank = false;
+		game.medium = false;
+		game.hard = false;
+	}
+	@FXML
+	private void setMedium() {
+		game.medium = true;
+
+		game.easy = false;
+		game.defaultWordBank = false;
+		game.hard = false;
+	}
+	@FXML
+	private void setHard() {
+		game.hard = true;
+
+		game.easy = false;
+		game.medium = false;
+		game.defaultWordBank = false;
+	}
+
 
 
 	private void promptNewGame(){

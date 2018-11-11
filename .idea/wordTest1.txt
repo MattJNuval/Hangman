@@ -1,3 +1,6 @@
-attack
 run
-sit
+walk
+talk
+invade
+irritate
+move
