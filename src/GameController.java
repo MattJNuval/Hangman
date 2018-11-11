@@ -175,6 +175,11 @@ public class GameController {
 		board.getScene().getWindow().hide();
 	}
 
+	@FXML
+	private void addWords() {
+
+	}
+
 
 	private void promptNewGame(){
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
