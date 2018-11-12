@@ -8,10 +8,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -45,6 +42,10 @@ public class GameController {
 	private Label answerBox;
 	@FXML
 	private Label answerField;
+	@FXML
+    private Label wrongLabel;
+	@FXML
+	private Label wrongList;
 
     public void initialize() throws IOException {
 		System.out.println("in initialize");
@@ -53,7 +54,9 @@ public class GameController {
 		setUpStatusLabelBindings();
 		setUpAnswerLabelBindings();
 		setUpAnswerField();
-	}
+        setUpWrongLabelBindings();
+        setUpWrongListBindings();
+    }
 
 	private void addTextBoxListener() {
 		textField.textProperty().addListener(new ChangeListener<String>() {
@@ -89,9 +92,17 @@ public class GameController {
 		answerBox.textProperty().bind(Bindings.format("%s", "Answer Box:"));
 
 	}
+	private void setUpWrongLabelBindings() {
+        wrongLabel.textProperty().bind(Bindings.format("%s", "Wrong Letters:"));
+
+	}
+
+	private void setUpWrongListBindings() {
+    	wrongList.textProperty().bind(Bindings.format("%s",""));
+	}
 
 	private void setUpAnswerField() {
-		answerField.textProperty().bind(Bindings.format("%s", game.getTmpAnswer()));
+		answerField.textProperty().bind(Bindings.format("%s", game.getProgressDisp()));
 
 	}
 
@@ -124,6 +135,9 @@ public class GameController {
 
 	private void updateHangman(){
 		Group man = (Group)board.getChildren().get(0);
+		//Updates the Fields
+		answerField.textProperty().bind(Bindings.format("%s", game.getProgressDisp()));
+		wrongList.textProperty().bind(Bindings.format("%s",game.getwrongLetter()));
 
 		if(game.getGameStatus() == Game.GameStatus.BAD_GUESS){
 			switch (game.getMoves()){
@@ -156,11 +170,20 @@ public class GameController {
 					man.getChildren().get(6).setVisible(true);
 					board.getChildren().clear();
 					board.getChildren().add(man);
-					promptNewGame();
 					break;
 				default:
 					break;
 			}
+		}
+		else if(game.getGameStatus() == Game.GameStatus.GAME_OVER) {
+
+			textField.clear();
+
+			promptNewGameIfLost();
+		}
+		else if(game.getGameStatus() == Game.GameStatus.WON){
+			textField.clear();
+			promptNewGameIfWin();
 		}
 	}
 		
@@ -168,6 +191,17 @@ public class GameController {
 	private void newHangman() {
 		game.reset();
 		initHangman();
+		answerField.textProperty().bind(Bindings.format("%s", game.getProgressDisp()));
+		wrongList.textProperty().bind(Bindings.format("%s",game.getwrongLetter()));
+	}
+
+	private void sameHangman() {
+    	game.continueGame();
+	}
+
+	@FXML
+	private void newHardHangman(){
+
 	}
 
 	@FXML
@@ -175,7 +209,118 @@ public class GameController {
 		board.getScene().getWindow().hide();
 	}
 
-	private void promptNewGame(){
+
+	@FXML
+	private void addWords() throws IOException {
+
+    	String newWord;
+
+		TextInputDialog dialog = new TextInputDialog();
+		dialog.setTitle("Add a Word to Game");
+		dialog.setHeaderText("Input a valid word");
+		dialog.setContentText("Word");
+
+
+		Optional<String> result = dialog.showAndWait();
+		if (result.isPresent()){
+
+			boolean isValid = true;
+			char wordArr[] = result.get().toCharArray();
+
+			for(int i = 0; i < wordArr.length; i++) {
+				if(!(Character.isAlphabetic(wordArr[i]))) {
+					isValid = false;
+				}
+			}
+
+if(isValid) {
+	newWord = result.get();
+	game.addNewWord(newWord);
+	System.out.println(newWord);
+
+} else {
+	Alert alert = new Alert(Alert.AlertType.WARNING);
+	alert.setTitle("Invalid Word");
+	alert.setHeaderText("Word inputed was invalid");
+	alert.setContentText("Make sure you word is a valid english word and contains no non-alphabetic characters");
+
+	alert.showAndWait();
+}
+
+
+
+
+		}
+
+	}
+
+	@FXML
+	private void setDefault() {
+    	game.defaultWordBank = true;
+    	game.easy = false;
+    	game.medium = false;
+    	game.hard = false;
+	}
+	@FXML
+	private void setEasy() {
+	   game.easy = true;
+
+		game.defaultWordBank = false;
+		game.medium = false;
+		game.hard = false;
+	}
+	@FXML
+	private void setMedium() {
+		game.medium = true;
+
+		game.easy = false;
+		game.defaultWordBank = false;
+		game.hard = false;
+	}
+	@FXML
+	private void setHard() {
+		game.hard = true;
+
+		game.easy = false;
+		game.medium = false;
+		game.defaultWordBank = false;
+	}
+
+
+
+	
+
+
+
+
+	private void promptNewGameIfWin() {
+    	Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+    	alert.setTitle("Game Over");
+    	alert.setHeaderText("You Won!");
+    	alert.setContentText("You have won the game! Select new game, continue or quit.");
+
+    	ButtonType newGame = new ButtonType("New Game");
+    	ButtonType contGame = new ButtonType("Continue");
+    	ButtonType quit = new ButtonType("Quit");
+
+    	alert.getButtonTypes().setAll(newGame, contGame, quit);
+
+    	Optional<ButtonType> result = alert.showAndWait();
+
+    	if(result.get() == newGame) {
+    		newHangman();
+
+		}
+		else if(result.get() == contGame) {
+			sameHangman();
+		}
+		else if(result.get() == quit) {
+			quit();
+		}
+	}
+
+	private void promptNewGameIfLost(){
+
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 		alert.setTitle("Game Over");
 		alert.setHeaderText("Answer: " + game.getAnswer());
@@ -193,6 +338,7 @@ public class GameController {
 		}else if(result.get() == quit){
 			quit();
 		}
+
 	}
 
 }

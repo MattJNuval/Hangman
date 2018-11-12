@@ -10,13 +10,25 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.GridPane?>
 
+<?import javafx.scene.control.RadioMenuItem?>
+<?import javafx.scene.control.ToggleGroup?>
 <BorderPane xmlns:fx="http://javafx.com/fxml">
 
 	<top>
 		<MenuBar>
+			<fx:define>
+				<ToggleGroup fx:id="tg1"/>
+			</fx:define>
 			<Menu text="Game">
 				<MenuItem text="New Game" onAction="#newHangman"/>
+				<MenuItem text="Add Words" onAction="#addWords"/>
 				<MenuItem text="Quit" onAction="#quit"/>
+			</Menu>
+			<Menu text = "Difficulty">
+				<RadioMenuItem text="Default" toggleGroup="$tg1" onAction="#setDefault"/>
+				<RadioMenuItem text="Easy" toggleGroup="$tg1" onAction="#setEasy"/>
+				<RadioMenuItem text="Medium" toggleGroup="$tg1" onAction="#setMedium"/>
+				<RadioMenuItem text="Hard" toggleGroup="$tg1" onAction="#setHard"/>
 			</Menu>
 		</MenuBar>
 	</top>
@@ -52,9 +64,18 @@
 				<Label fx:id="answerField" GridPane.rowIndex="0" GridPane.columnIndex="1">
 					<styleClass>
 						<String fx:value="status"/>
+				</styleClass>
+				</Label>
+				<Label fx:id="wrongLabel" GridPane.rowIndex="2" GridPane.columnIndex="0">
+					<styleClass>
+						<String fx:value="status"/>
 					</styleClass>
 				</Label>
-
+				<Label fx:id="wrongList" GridPane.rowIndex="2" GridPane.columnIndex="1">
+					<styleClass>
+						<String fx:value="status"/>
+					</styleClass>
+				</Label>
 			</GridPane>
 		</VBox>
 	</bottom>
