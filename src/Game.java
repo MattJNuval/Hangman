@@ -98,6 +98,7 @@ public class Game {
 		prepLetterAndPosArray();
 		moves = 0;
 		setProgressArr();
+		setProgressDisp();
 		log("for DEV rm later answer is " + answer);
 
 		gameState.setValue(false); // initial state
@@ -268,6 +269,7 @@ public class Game {
 		for(int i = 0; i < answer.length(); i++) {
 			int progressIndex = 2 * i;
 			progressArr[progressIndex] = "_";
+			progressDisp= progressDisp +"_";
 		}
 
 		log("progressArr set " + Arrays.toString(progressArr));
@@ -321,7 +323,9 @@ public class Game {
 		prepTmpAnswer();
 		prepLetterAndPosArray();
 		setProgressArr();
+
 		progressDisp = "";
+		setProgressDisp();
 		wrongLetter = " ";
 		gameStarted = false;
 		createGameStatusBinding();

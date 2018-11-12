@@ -105,7 +105,7 @@ public class GameController {
 	}
 
 	private void setUpAnswerField() {
-		answerField.textProperty().bind(Bindings.format("%s", game.getTmpAnswer()));
+		answerField.textProperty().bind(Bindings.format("%s", game.getProgressDisp()));
 
 	}
 
@@ -139,7 +139,7 @@ public class GameController {
 	private void updateHangman(){
 		Group man = (Group)board.getChildren().get(0);
 		//Updates the Fields
-		answerField.textProperty().bind(Bindings.format("%s", game.getTmpAnswer()));
+		answerField.textProperty().bind(Bindings.format("%s", game.getProgressDisp()));
 		wrongList.textProperty().bind(Bindings.format("%s",game.getwrongLetter()));
 
 		if(game.getGameStatus() == Game.GameStatus.BAD_GUESS){
@@ -194,6 +194,8 @@ public class GameController {
 	private void newHangman() {
 		game.reset();
 		initHangman();
+		answerField.textProperty().bind(Bindings.format("%s", game.getProgressDisp()));
+		wrongList.textProperty().bind(Bindings.format("%s",game.getwrongLetter()));
 	}
 
 	private void sameHangman() {
@@ -229,6 +231,7 @@ public class GameController {
 
     	if(result.get() == newGame) {
     		newHangman();
+
 		}
 		else if(result.get() == contGame) {
 			sameHangman();
