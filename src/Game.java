@@ -8,8 +8,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,6 +29,11 @@ public class Game {
 	private ObjectProperty<Boolean> gameState = new ReadOnlyObjectWrapper<Boolean>();
 
 
+	// !!For Robert!! the progress part
+	// setsize in init
+	// in update --- set the progress
+	// in reset --- reset the size
+
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//variable inputedLetter - used for getting the recently inputed letter
 	// variable gameStarted - used to indicate whether the Game was started - implemented in ComputeValues
@@ -42,7 +47,11 @@ public class Game {
 	// String used in the label to display progress
 	private String progressDisp;
 
-	
+	boolean defaultWordBank = true;
+	boolean easy = false;
+	boolean medium = false;
+	boolean hard = false;
+
 
 	public enum GameStatus {
 		GAME_OVER {
@@ -101,6 +110,9 @@ public class Game {
 		setProgressDisp();
 		log("for DEV rm later answer is " + answer);
 
+		setProgressArr();
+		log("for DEV rm later answer is " + answer);
+
 		gameState.setValue(false); // initial state
 		createGameStatusBinding();
 	}
@@ -128,12 +140,19 @@ public class Game {
 				}
 				else if (index != -1){
 					log("good guess");
+
+					updateProgessArr(index, inputedLetter);
+
 					return GameStatus.GOOD_GUESS;
+
 				}
 				else {
-					moves++;
-					log("bad guess");
-					return GameStatus.BAD_GUESS;
+
+
+						moves++;
+						log("bad guess");
+						return GameStatus.BAD_GUESS;
+
 				}
 			}
 		};
@@ -154,7 +173,34 @@ public class Game {
 		// get number of words in textfile
 		// allows new names to be added to the text file without breaking anything
 
-		File file = new File(".idea/words.txt");
+		File file;
+
+		String wordDefault = ".idea/words.txt";
+		String wordEasy = ".idea/wordEasy.txt";
+		String wordMedium = ".idea/wordMedium.txt";
+		String wordHard = ".idea/wordHard.txt";
+
+
+		if(defaultWordBank) {
+			file = new File(wordDefault);
+
+		} else if(easy){
+			file = new File(wordEasy);
+
+		} else if(medium) {
+			file = new File(wordMedium);
+
+		} else if(hard) {
+			file = new File(wordHard);
+
+		} else {
+			//shouldnt get here but covering my bases
+			file = new File(wordDefault);
+		}
+
+
+
+
 		Scanner input = new Scanner(file);
 		int numWords = 0;
 		while (input.hasNextLine() != false) {
@@ -179,6 +225,85 @@ public class Game {
 			}
 		}
 		input.close();
+
+	}
+
+	// in this we add to the main bank and then add the word to its appropriate difficulty bank
+	public void addNewWord(String newWord) throws IOException {
+
+        // strings for the paths
+		String wordDefault = ".idea/words.txt";
+		String wordEasy = ".idea/wordEasy.txt";
+		String wordMedium = ".idea/wordMedium.txt";
+		String wordHard = ".idea/wordHard.txt";
+
+
+		String totalStr = "";
+		String readStr = "";
+
+		File file;
+
+
+		if(newWord.length() <= 3) {
+
+			file = new File(wordEasy);
+
+		} else if(newWord.length() > 3 && newWord.length() <= 5) {
+			file = new File(wordMedium);
+
+		} else if(newWord.length() > 5) {
+			file = new File(wordHard);
+
+		} else {
+			// should take care of any odd behavior for now
+			file = new File(wordDefault);
+
+		}
+
+
+
+		FileReader fr = new FileReader(file);
+		BufferedReader br = new BufferedReader(fr);
+
+
+		while((readStr = br.readLine()) != null) {
+			totalStr = totalStr + readStr + "\n";
+		}
+
+		br.close();
+
+		totalStr = totalStr + newWord;
+
+
+		FileWriter fw = new FileWriter(file);
+		fw.write(totalStr);
+		fw.close();
+
+
+
+		// add the word to the master list
+		totalStr = "";
+		readStr = "";
+
+		File fileWords = new File(wordDefault);
+		FileReader frW = new FileReader(fileWords);
+		BufferedReader brW = new BufferedReader(frW);
+
+
+		while((readStr = brW.readLine()) != null) {
+			totalStr = totalStr + readStr + "\n";
+		}
+
+		brW.close();
+
+		totalStr = totalStr + newWord;
+
+
+		FileWriter fwW = new FileWriter(fileWords);
+		fwW.write(totalStr);
+		fwW.close();
+
+
 
 	}
 
@@ -253,7 +378,7 @@ public class Game {
 		return wrongLetter;
 	}
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	// allows controller to get the labels display
 	public String getProgressDisp() {
 		return progressDisp;
@@ -267,6 +392,7 @@ public class Game {
 		Arrays.fill(progressArr, "");
 
 		for(int i = 0; i < answer.length(); i++) {
+
 			int progressIndex = 2 * i;
 			progressArr[progressIndex] = "_";
 			progressDisp= progressDisp +"_";
@@ -300,7 +426,7 @@ public class Game {
 		}
 
 	}
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 	// where game will reset
 	// set moves to 0
@@ -319,17 +445,23 @@ public class Game {
 			log("couldnt find file");
 		}
 
+
 		moves = 0;
 		prepTmpAnswer();
 		prepLetterAndPosArray();
 		setProgressArr();
 
+
+		
+		log("DEV new game answer is" + answer);
+
+
 		progressDisp = "";
 		setProgressDisp();
 		wrongLetter = " ";
+
 		gameStarted = false;
 		createGameStatusBinding();
-
 
 	}
 
@@ -352,6 +484,7 @@ public class Game {
 	private int numOfTries() {
 		return 6; // Based on the number of body parts of the stick figure
 	}
+
 
 	public static void log(String s) {
 		System.out.println(s);
