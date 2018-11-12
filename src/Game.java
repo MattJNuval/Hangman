@@ -37,7 +37,8 @@ public class Game {
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//variable inputedLetter - used for getting the recently inputed letter
 	// variable gameStarted - used to indicate whether the Game was started - implemented in ComputeValues
-	private String inputedLetter;
+	private String inputedLetter = "";
+	private String wrongLetter =" ";
 	private boolean gameStarted = false;
 
 	// array that changes based on progress
@@ -106,6 +107,7 @@ public class Game {
 		prepLetterAndPosArray();
 		moves = 0;
 		setProgressArr();
+		setProgressDisp();
 		log("for DEV rm later answer is " + answer);
 
 		setProgressArr();
@@ -125,6 +127,7 @@ public class Game {
 			public GameStatus computeValue() {
 				log("in computeValue");
 				System.out.println("tempAnswer is " + tmpAnswer);
+				System.out.println("Answer is: " + answer);
 				GameStatus check = checkForWinner(index);
 				if(check != null ) {
 					return check;
@@ -155,6 +158,8 @@ public class Game {
 		};
 		gameStatus.bind(gameStatusBinding);
 	}
+
+
 
 	public ReadOnlyObjectProperty<GameStatus> gameStatusProperty() {
 		return gameStatus.getReadOnlyProperty();
@@ -364,8 +369,13 @@ public class Game {
 	}
 
 	// allows you to get inputedLetter for displaying
-	public String getInputedLetter(){
-		return inputedLetter;
+	public String getwrongLetter(){
+
+		if(this.getGameStatus() == Game.GameStatus.BAD_GUESS)
+		{
+			wrongLetter = wrongLetter +inputedLetter;
+		}
+		return wrongLetter;
 	}
 
 
@@ -385,6 +395,7 @@ public class Game {
 
 			int progressIndex = 2 * i;
 			progressArr[progressIndex] = "_";
+			progressDisp= progressDisp +"_";
 		}
 
 		log("progressArr set " + Arrays.toString(progressArr));
@@ -439,11 +450,31 @@ public class Game {
 		prepTmpAnswer();
 		prepLetterAndPosArray();
 		setProgressArr();
-		progressDisp = "";
 
-		setProgressArr();
-		progressDisp = "";
+
+		
 		log("DEV new game answer is" + answer);
+
+
+		progressDisp = "";
+		setProgressDisp();
+		wrongLetter = " ";
+
+		gameStarted = false;
+		createGameStatusBinding();
+
+	}
+
+	public void continueGame() {
+		try {
+			setRandomWord();
+		} catch (Exception e) {
+			log("couldnt find file");
+		}
+
+		moves = getMoves();
+		prepTmpAnswer();;
+		prepLetterAndPosArray();
 
 		gameStarted = false;
 		createGameStatusBinding();

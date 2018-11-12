@@ -42,6 +42,10 @@ public class GameController {
 	private Label answerBox;
 	@FXML
 	private Label answerField;
+	@FXML
+    private Label wrongLabel;
+	@FXML
+	private Label wrongList;
 
     public void initialize() throws IOException {
 		System.out.println("in initialize");
@@ -50,7 +54,9 @@ public class GameController {
 		setUpStatusLabelBindings();
 		setUpAnswerLabelBindings();
 		setUpAnswerField();
-	}
+        setUpWrongLabelBindings();
+        setUpWrongListBindings();
+    }
 
 	private void addTextBoxListener() {
 		textField.textProperty().addListener(new ChangeListener<String>() {
@@ -86,9 +92,17 @@ public class GameController {
 		answerBox.textProperty().bind(Bindings.format("%s", "Answer Box:"));
 
 	}
+	private void setUpWrongLabelBindings() {
+        wrongLabel.textProperty().bind(Bindings.format("%s", "Wrong Letters:"));
+
+	}
+
+	private void setUpWrongListBindings() {
+    	wrongList.textProperty().bind(Bindings.format("%s",""));
+	}
 
 	private void setUpAnswerField() {
-		answerField.textProperty().bind(Bindings.format("%s", game.getTmpAnswer()));
+		answerField.textProperty().bind(Bindings.format("%s", game.getProgressDisp()));
 
 	}
 
@@ -121,6 +135,9 @@ public class GameController {
 
 	private void updateHangman(){
 		Group man = (Group)board.getChildren().get(0);
+		//Updates the Fields
+		answerField.textProperty().bind(Bindings.format("%s", game.getProgressDisp()));
+		wrongList.textProperty().bind(Bindings.format("%s",game.getwrongLetter()));
 
 		if(game.getGameStatus() == Game.GameStatus.BAD_GUESS){
 			switch (game.getMoves()){
@@ -153,11 +170,20 @@ public class GameController {
 					man.getChildren().get(6).setVisible(true);
 					board.getChildren().clear();
 					board.getChildren().add(man);
-					promptNewGame();
 					break;
 				default:
 					break;
 			}
+		}
+		else if(game.getGameStatus() == Game.GameStatus.GAME_OVER) {
+
+			textField.clear();
+
+			promptNewGameIfLost();
+		}
+		else if(game.getGameStatus() == Game.GameStatus.WON){
+			textField.clear();
+			promptNewGameIfWin();
 		}
 	}
 		
@@ -165,12 +191,24 @@ public class GameController {
 	private void newHangman() {
 		game.reset();
 		initHangman();
+		answerField.textProperty().bind(Bindings.format("%s", game.getProgressDisp()));
+		wrongList.textProperty().bind(Bindings.format("%s",game.getwrongLetter()));
+	}
+
+	private void sameHangman() {
+    	game.continueGame();
+	}
+
+	@FXML
+	private void newHardHangman(){
+
 	}
 
 	@FXML
 	private void quit() {
 		board.getScene().getWindow().hide();
 	}
+
 
 	@FXML
 	private void addWords() throws IOException {
@@ -250,7 +288,39 @@ if(isValid) {
 
 
 
-	private void promptNewGame(){
+	
+
+
+
+
+	private void promptNewGameIfWin() {
+    	Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+    	alert.setTitle("Game Over");
+    	alert.setHeaderText("You Won!");
+    	alert.setContentText("You have won the game! Select new game, continue or quit.");
+
+    	ButtonType newGame = new ButtonType("New Game");
+    	ButtonType contGame = new ButtonType("Continue");
+    	ButtonType quit = new ButtonType("Quit");
+
+    	alert.getButtonTypes().setAll(newGame, contGame, quit);
+
+    	Optional<ButtonType> result = alert.showAndWait();
+
+    	if(result.get() == newGame) {
+    		newHangman();
+
+		}
+		else if(result.get() == contGame) {
+			sameHangman();
+		}
+		else if(result.get() == quit) {
+			quit();
+		}
+	}
+
+	private void promptNewGameIfLost(){
+
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 		alert.setTitle("Game Over");
 		alert.setHeaderText("Answer: " + game.getAnswer());
