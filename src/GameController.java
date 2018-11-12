@@ -225,6 +225,8 @@ public class GameController {
 
 	private void sameHangman() {
     	game.continueGame();
+		answerField.textProperty().bind(Bindings.format("%s", game.getProgressDisp()));
+		wrongList.textProperty().bind(Bindings.format("%s",game.getwrongLetter()));
 	}
 
 	@FXML
