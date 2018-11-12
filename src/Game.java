@@ -404,7 +404,7 @@ public class Game {
 		newIndex = newIndex * 2;
 		progressArr[newIndex] = inputedLetter;
 
-		log("progress array is updatded to " + Arrays.toString(progressArr));
+		log("progress array is updated to " + Arrays.toString(progressArr));
 		setProgressDisp();
 
 		log("progressDisp is " + progressDisp);
@@ -473,7 +473,10 @@ public class Game {
 		moves = getMoves();
 		prepTmpAnswer();;
 		prepLetterAndPosArray();
-
+        setProgressArr();
+        progressDisp = "";
+        setProgressDisp();
+        wrongLetter = " ";
 		gameStarted = false;
 		createGameStatusBinding();
 
