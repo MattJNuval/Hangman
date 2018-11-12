@@ -108,9 +108,7 @@ public class Game {
 		moves = 0;
 		setProgressArr();
 		setProgressDisp();
-		log("for DEV rm later answer is " + answer);
 
-		setProgressArr();
 		log("for DEV rm later answer is " + answer);
 
 		gameState.setValue(false); // initial state
@@ -406,7 +404,7 @@ public class Game {
 		newIndex = newIndex * 2;
 		progressArr[newIndex] = inputedLetter;
 
-		log("progress array is updatded to " + Arrays.toString(progressArr));
+		log("progress array is updated to " + Arrays.toString(progressArr));
 		setProgressDisp();
 
 		log("progressDisp is " + progressDisp);
@@ -473,9 +471,12 @@ public class Game {
 		}
 
 		moves = getMoves();
-		prepTmpAnswer();;
+		prepTmpAnswer();
 		prepLetterAndPosArray();
-
+        setProgressArr();
+        progressDisp = "";
+        setProgressDisp();
+        wrongLetter = " ";
 		gameStarted = false;
 		createGameStatusBinding();
 
