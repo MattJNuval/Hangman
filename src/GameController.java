@@ -218,8 +218,8 @@ public class GameController {
 	private void promptNewGameIfWin() {
     	Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
     	alert.setTitle("Game Over");
-    	alert.setHeaderText("You win!");
-    	alert.setContentText("You have won the game! Select new game,continue or quit");
+    	alert.setHeaderText("You Won!");
+    	alert.setContentText("You have won the game! Select new game, continue or quit.");
 
     	ButtonType newGame = new ButtonType("New Game");
     	ButtonType contGame = new ButtonType("Continue");
