@@ -1,15 +1,15 @@
 # HangmanGUIJavaFx
 
 ## Platform
-	* Windows
+* Windows
 ## IDE
-	* Intelij 
+* Intelij 
 ## SDK
-	* JDK 10.1
+* JDK 10.1
 ## Shell Instructions
 
 ## Libraries
-	* JavaFX
-	* Java Utilities
-	* Java IO
+* JavaFX
+* Java Utilities
+* Java IO
 	
