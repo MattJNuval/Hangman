@@ -197,6 +197,8 @@ public class GameController {
 
 	private void sameHangman() {
     	game.continueGame();
+		answerField.textProperty().bind(Bindings.format("%s", game.getProgressDisp()));
+		wrongList.textProperty().bind(Bindings.format("%s",game.getwrongLetter()));
 	}
 
 	@FXML
@@ -313,6 +315,7 @@ if(isValid) {
 		}
 		else if(result.get() == contGame) {
 			sameHangman();
+
 		}
 		else if(result.get() == quit) {
 			quit();
