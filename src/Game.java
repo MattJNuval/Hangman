@@ -471,7 +471,7 @@ public class Game {
 		}
 
 		moves = getMoves();
-		prepTmpAnswer();;
+		prepTmpAnswer();
 		prepLetterAndPosArray();
         setProgressArr();
         progressDisp = "";
