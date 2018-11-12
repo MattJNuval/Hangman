@@ -108,9 +108,7 @@ public class Game {
 		moves = 0;
 		setProgressArr();
 		setProgressDisp();
-		log("for DEV rm later answer is " + answer);
 
-		setProgressArr();
 		log("for DEV rm later answer is " + answer);
 
 		gameState.setValue(false); // initial state
