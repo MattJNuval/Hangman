@@ -340,6 +340,7 @@ public class GameController {
 		}
 		else if(result.get() == contGame) {
 			sameHangman();
+
 		}
 		else if(result.get() == quit) {
 			quit();
