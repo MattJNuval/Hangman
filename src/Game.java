@@ -172,13 +172,14 @@ public class Game {
 
 		// get number of words in textfile
 		// allows new names to be added to the text file without breaking anything
+		//InputStream in = this.getClass().getClassLoader().getResourceAsStream("SomeTextFile.txt");
 
 		File file;
 
-		String wordDefault = ".idea/words.txt";
-		String wordEasy = ".idea/wordEasy.txt";
-		String wordMedium = ".idea/wordMedium.txt";
-		String wordHard = ".idea/wordHard.txt";
+		String wordDefault = "words.txt";
+		String wordEasy = "wordEasy.txt";
+		String wordMedium = "wordMedium.txt";
+		String wordHard = "wordHard.txt";
 
 
 		if(defaultWordBank) {
