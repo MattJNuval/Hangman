@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.transform.Scale;
 
 public class GameController {
 
@@ -108,8 +109,18 @@ public class GameController {
 
 	private void drawHangman() {
 
-    	Group man = new Group();
+    	Group hangman = new Group();
+    	Scale scale = new Scale();
+    	scale.setX(2.5);
+    	scale.setY(2.5);
+
 		Line rope = new Line(25.0f, 0.0f, 25.0f,25.0f);
+		Line stand_top = new Line(-10.0f, 0.0f, 25.0f, 0.f);
+		Line stand_vertical = new Line(-10.0f, 0.f, -10.0f, 120.0f);
+		Line stand_base = new Line(-20.0f, 120.0f, 10.0f, 120.0f);
+		Line stand_leftSupport = new Line(-20.0f, 120.0f, -10.0f, 105.0f);
+		Line stand_rightSupport = new Line(10.0f, 120.0f, -10.0f, 105.0f);
+
 		Circle head = new Circle(10);
 		Line body = new Line(25.0f, 35.0f, 25.0f, 75.0f);
 		Line left_arm = new Line(25.0f, 50.0f, 10.0f, 35.0f);
@@ -119,18 +130,36 @@ public class GameController {
 
 		head.setTranslateX(25.0f);
 		head.setTranslateY(25.0f);
-		man.getChildren().addAll(rope, head, body, left_arm, right_arm, left_leg, right_leg);
-		board.getChildren().add(man);
+		hangman.getChildren().addAll(rope,stand_top,stand_vertical,stand_base,stand_leftSupport,stand_rightSupport, head, body, left_arm, right_arm, left_leg, right_leg);
+		hangman.getTransforms().addAll(scale);
+		board.getChildren().clear();
+		board.getChildren().add(hangman);
 		initHangman();
 	}
 
 	private void initHangman(){
     	Group man = (Group)board.getChildren().get(0);
     	for(int i = 0; i < 6; i++){
-    		man.getChildren().get(i+1).setVisible(false);
+    		man.getChildren().get(6+i).setVisible(false);
 		}
 		board.getChildren().clear();
     	board.getChildren().add(man);
+	}
+
+	private void animateHangman(){
+    	Group man = (Group)board.getChildren().get(0);
+		Line left_arm = new Line(25.0f, 50.0f, 20.0f, 65.0f);
+		Line right_arm = new Line(25.0f, 50.0f, 30.0f, 65.0f);
+		Line left_leg = new Line(25.0f, 75.0f, 20.0f, 90.0f);
+		Line right_leg = new Line(25.0f, 75.0f, 30.0f, 90.0f);
+
+		man.getChildren().set(8, left_arm);
+		man.getChildren().set(9, right_arm);
+		man.getChildren().set(10, left_leg);
+		man.getChildren().set(11, right_leg);
+
+		board.getChildren().clear();
+		board.getChildren().add(man);
 	}
 
 	private void updateHangman(){
@@ -142,32 +171,32 @@ public class GameController {
 		if(game.getGameStatus() == Game.GameStatus.BAD_GUESS){
 			switch (game.getMoves()){
 				case 1: // Head
-					man.getChildren().get(1).setVisible(true);
+					man.getChildren().get(6).setVisible(true);
 					board.getChildren().clear();
 					board.getChildren().add(man);
 					break;
 				case 2: // Body
-					man.getChildren().get(2).setVisible(true);
+					man.getChildren().get(7).setVisible(true);
 					board.getChildren().clear();
 					board.getChildren().add(man);
 					break;
 				case 3: // Left Arm
-					man.getChildren().get(3).setVisible(true);
+					man.getChildren().get(8).setVisible(true);
 					board.getChildren().clear();
 					board.getChildren().add(man);
 					break;
 				case 4: // Right Arm
-					man.getChildren().get(4).setVisible(true);
+					man.getChildren().get(9).setVisible(true);
 					board.getChildren().clear();
 					board.getChildren().add(man);
 					break;
 				case 5: // Left Leg
-					man.getChildren().get(5).setVisible(true);
+					man.getChildren().get(10).setVisible(true);
 					board.getChildren().clear();
 					board.getChildren().add(man);
 					break;
 				case 6: // Right Leg
-					man.getChildren().get(6).setVisible(true);
+					man.getChildren().get(11).setVisible(true);
 					board.getChildren().clear();
 					board.getChildren().add(man);
 					break;
@@ -176,9 +205,8 @@ public class GameController {
 			}
 		}
 		else if(game.getGameStatus() == Game.GameStatus.GAME_OVER) {
-
+			animateHangman();
 			textField.clear();
-
 			promptNewGameIfLost();
 		}
 		else if(game.getGameStatus() == Game.GameStatus.WON){
@@ -190,13 +218,15 @@ public class GameController {
 	@FXML 
 	private void newHangman() {
 		game.reset();
-		initHangman();
+		drawHangman();
 		answerField.textProperty().bind(Bindings.format("%s", game.getProgressDisp()));
 		wrongList.textProperty().bind(Bindings.format("%s",game.getwrongLetter()));
 	}
 
 	private void sameHangman() {
     	game.continueGame();
+		answerField.textProperty().bind(Bindings.format("%s", game.getProgressDisp()));
+		wrongList.textProperty().bind(Bindings.format("%s",game.getwrongLetter()));
 	}
 
 	@FXML
@@ -233,22 +263,19 @@ public class GameController {
 				}
 			}
 
-if(isValid) {
-	newWord = result.get();
-	game.addNewWord(newWord);
-	System.out.println(newWord);
+			if(isValid) {
+				newWord = result.get();
+				game.addNewWord(newWord);
+				System.out.println(newWord);
 
-} else {
-	Alert alert = new Alert(Alert.AlertType.WARNING);
-	alert.setTitle("Invalid Word");
-	alert.setHeaderText("Word inputed was invalid");
-	alert.setContentText("Make sure you word is a valid english word and contains no non-alphabetic characters");
+			} else {
+				Alert alert = new Alert(Alert.AlertType.WARNING);
+				alert.setTitle("Invalid Word");
+				alert.setHeaderText("Word inputed was invalid");
+				alert.setContentText("Make sure you word is a valid english word and contains no non-alphabetic characters");
 
-	alert.showAndWait();
-}
-
-
-
+				alert.showAndWait();
+			}
 
 		}
 
@@ -313,6 +340,7 @@ if(isValid) {
 		}
 		else if(result.get() == contGame) {
 			sameHangman();
+
 		}
 		else if(result.get() == quit) {
 			quit();
