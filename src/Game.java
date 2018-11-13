@@ -52,6 +52,8 @@ public class Game {
 	boolean medium = false;
 	boolean hard = false;
 
+	// list array holding the indexs of a letter found;
+	List<Integer> foundIndexes;
 
 	public enum GameStatus {
 		GAME_OVER {
@@ -110,7 +112,7 @@ public class Game {
 		setProgressDisp();
 
 		log("for DEV rm later answer is " + answer);
-
+		foundIndexes = new ArrayList<Integer>();
 		gameState.setValue(false); // initial state
 		createGameStatusBinding();
 	}
@@ -139,7 +141,7 @@ public class Game {
 				else if (index != -1){
 					log("good guess");
 
-					updateProgessArr(index, inputedLetter);
+					//updateProgessArr(foundIndexes, inputedLetter);
 
 					return GameStatus.GOOD_GUESS;
 
@@ -170,13 +172,14 @@ public class Game {
 
 		// get number of words in textfile
 		// allows new names to be added to the text file without breaking anything
+		//InputStream in = this.getClass().getClassLoader().getResourceAsStream("SomeTextFile.txt");
 
 		File file;
 
-		String wordDefault = ".idea/words.txt";
-		String wordEasy = ".idea/wordEasy.txt";
-		String wordMedium = ".idea/wordMedium.txt";
-		String wordHard = ".idea/wordHard.txt";
+		String wordDefault = "words.txt";
+		String wordEasy = "wordEasy.txt";
+		String wordMedium = "wordMedium.txt";
+		String wordHard = "wordHard.txt";
 
 
 		if(defaultWordBank) {
@@ -230,10 +233,10 @@ public class Game {
 	public void addNewWord(String newWord) throws IOException {
 
         // strings for the paths
-		String wordDefault = ".idea/words.txt";
-		String wordEasy = ".idea/wordEasy.txt";
-		String wordMedium = ".idea/wordMedium.txt";
-		String wordHard = ".idea/wordHard.txt";
+		String wordDefault = "words.txt";
+		String wordEasy = "wordEasy.txt";
+		String wordMedium = "wordMedium.txt";
+		String wordHard = "wordHard.txt";
 
 
 		String totalStr = "";
@@ -326,9 +329,11 @@ public class Game {
 			if(letterAndPosArray[i].equals(input)) {
 				index = i;
 				letterAndPosArray[i] = "";
-				break;
+				foundIndexes.add(index);
 			}
 		}
+		log("foundIndex contains " + foundIndexes.toString());
+
 		return index;
 	}
 
@@ -337,8 +342,16 @@ public class Game {
 		if(index != -1) {
 			System.out.println("index is not -1");
 			StringBuilder sb = new StringBuilder(tmpAnswer);
-			sb.setCharAt(index, input.charAt(0));
+
+			for(int i = 0; i < foundIndexes.size(); i++) {
+
+				sb.setCharAt(foundIndexes.get(i), input.charAt(0));
+
+			}
+log("sb has " + sb.toString());
+			//sb.setCharAt(index, input.charAt(0));
 			tmpAnswer = sb.toString();
+
 		}
 		System.out.println("index is " + index);
 		return index;
@@ -350,7 +363,7 @@ public class Game {
 		index = update(letter);
 
 		if(index != -1) {
-			updateProgessArr(index, inputedLetter);
+			updateProgessArr(foundIndexes, inputedLetter);
 		}
 
 		// this will toggle the state of the game
@@ -399,14 +412,24 @@ public class Game {
 		log("progressArr set " + Arrays.toString(progressArr));
 	}
 
-	public void updateProgessArr(int newIndex, String inputedLetter) {
+	public void updateProgessArr(List<Integer> newIndexes, String inputedLetter) {
 
-		newIndex = newIndex * 2;
-		progressArr[newIndex] = inputedLetter;
+		int replaceIndex;
+		for(int i = 0; i < newIndexes.size(); i++) {
+
+			replaceIndex = newIndexes.get(i) * 2;
+			progressArr[replaceIndex] = inputedLetter;
+
+
+		}
+
+		// old keep for reference
+		//newIndex = newIndex * 2;
+		//progressArr[newIndex] = inputedLetter;
 
 		log("progress array is updated to " + Arrays.toString(progressArr));
 		setProgressDisp();
-
+foundIndexes.clear();
 		log("progressDisp is " + progressDisp);
 
 	}
@@ -457,7 +480,7 @@ public class Game {
 		progressDisp = "";
 		setProgressDisp();
 		wrongLetter = " ";
-
+		foundIndexes = new ArrayList<Integer>();
 		gameStarted = false;
 		createGameStatusBinding();
 
@@ -473,10 +496,16 @@ public class Game {
 		moves = getMoves();
 		prepTmpAnswer();
 		prepLetterAndPosArray();
-        setProgressArr();
-        progressDisp = "";
-        setProgressDisp();
-        wrongLetter = " ";
+
+
+		progressDisp = "";
+    setProgressArr();
+		
+		wrongLetter = " ";
+		foundIndexes = new ArrayList<Integer>();
+		setProgressDisp();
+
+
 		gameStarted = false;
 		createGameStatusBinding();
 
