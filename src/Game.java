@@ -110,9 +110,7 @@ public class Game {
 		moves = 0;
 		setProgressArr();
 		setProgressDisp();
-		log("for DEV rm later answer is " + answer);
 
-		setProgressArr();
 		log("for DEV rm later answer is " + answer);
 		foundIndexes = new ArrayList<Integer>();
 		gameState.setValue(false); // initial state
@@ -428,7 +426,7 @@ log("sb has " + sb.toString());
 		//newIndex = newIndex * 2;
 		//progressArr[newIndex] = inputedLetter;
 
-		log("progress array is updatded to " + Arrays.toString(progressArr));
+		log("progress array is updated to " + Arrays.toString(progressArr));
 		setProgressDisp();
 foundIndexes.clear();
 		log("progressDisp is " + progressDisp);
@@ -495,14 +493,17 @@ foundIndexes.clear();
 		}
 
 		moves = getMoves();
-		prepTmpAnswer();;
+		prepTmpAnswer();
 		prepLetterAndPosArray();
 
+
 		progressDisp = "";
-		setProgressDisp();
+    setProgressArr();
+		
 		wrongLetter = " ";
 		foundIndexes = new ArrayList<Integer>();
 		setProgressDisp();
+
 
 		gameStarted = false;
 		createGameStatusBinding();
