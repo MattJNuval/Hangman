@@ -15,7 +15,8 @@ public class Hangman extends Application {
 		System.out.println(getClass().getResource("Hangman.fxml"));
 		Parent root = loader.load();
 
-		Scene scene = new Scene(root, 800, 900);
+		Scene scene = new Scene(root, 700, 800);
+		primaryStage.setResizable(false);
 
 		scene.getStylesheets().add(getClass().getResource("Hangman.css").toExternalForm());
 		primaryStage.setScene(scene);
